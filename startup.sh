@@ -1,95 +1,188 @@
 #!/bin/bash
-set -euo pipefail
+set -e
+source /venv/main/bin/activate
 
-COMFY_DIR="/workspace/ComfyUI"
-CUSTOM_NODES_DIR="$COMFY_DIR/custom_nodes"
-MODELS_DIR="$COMFY_DIR/models"
-NODE_NAME="comfyui-teskors-utils-main"
+WORKSPACE=${WORKSPACE:-/workspace}
+COMFYUI_DIR="${WORKSPACE}/ComfyUI"
 
-mkdir -p "$CUSTOM_NODES_DIR"
-mkdir -p "$MODELS_DIR/diffusion_models" \
-         "$MODELS_DIR/loras" \
-         "$MODELS_DIR/vae" \
-         "$MODELS_DIR/text_encoders" \
-         "$MODELS_DIR/clip_vision" \
-         "$MODELS_DIR/onnx/wholebody"
+echo "=== ComfyUI запускает ( x-mode) ==="
 
-download_file () {
-  local URL="$1"
-  local DEST="$2"
-  mkdir -p "$(dirname "$DEST")"
-  if [ ! -f "$DEST" ]; then
-    echo "Downloading: $DEST"
-    wget -O "$DEST" "$URL"
-  else
-    echo "Already exists: $DEST"
-  fi
-}
+APT_PACKAGES=()           # если нужно — добавь sudo apt install ...
+PIP_PACKAGES=()           # глобальные pip пакеты, если сверх requirements
 
-python -m pip install --no-cache-dir -U huggingface_hub
-
-if [ ! -d "$CUSTOM_NODES_DIR/$NODE_NAME" ]; then
-python - <<'PY'
-from huggingface_hub import snapshot_download
-import shutil, os
-
-repo_id = "vilone60/workbombom"
-node_name = "comfyui-teskors-utils-main"
-target_dir = f"/workspace/ComfyUI/custom_nodes/{node_name}"
-tmp_dir = "/tmp/hf_workbombom"
-
-if os.path.exists(tmp_dir):
-    shutil.rmtree(tmp_dir)
-
-snapshot_download(
-    repo_id=repo_id,
-    repo_type="model",
-    local_dir=tmp_dir,
-    local_dir_use_symlinks=False,
-    allow_patterns=[f"{node_name}/*"]
+NODES=(
+    "https://github.com/kijai/ComfyUI-WanVideoWrapper"
+    "https://github.com/chflame163/ComfyUI_LayerStyle"
+    "https://github.com/yolain/ComfyUI-Easy-Use"
+    "https://github.com/kijai/ComfyUI-KJNodes"
+    "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
+    "https://github.com/kijai/ComfyUI-segment-anything-2"
+    "https://github.com/cubiq/ComfyUI_essentials"
+    "https://github.com/fq393/ComfyUI-ZMG-Nodes"
+    "https://github.com/kijai/ComfyUI-WanAnimatePreprocess"
+    "https://github.com/rgthree/rgthree-comfy"
+    "https://github.com/jnxmx/ComfyUI_HuggingFace_Downloader"
+    "https://github.com/teskor-hub/NEW-UTILS.git"
 )
 
-src = os.path.join(tmp_dir, node_name)
-if not os.path.exists(src):
-    raise RuntimeError(f"Folder not found: {src}")
+# ЗАГРУЗКА ФАЙЛОВ НУЖНЫХ
+CLIP_MODELS=(
+    "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/klip_vision.safetensors"
+)
+CLIPS=(
+"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors"
+)
 
-if os.path.exists(target_dir):
-    shutil.rmtree(target_dir)
+TEXT_ENCODERS=(
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/text_enc.safetensors"
+)
 
-shutil.copytree(src, target_dir)
-print(f"Installed node: {target_dir}")
-PY
+UNET_MODELS=(
+    "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors"
+)
+
+VAE_MODELS=(
+    "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/vae.safetensors"
+)
+
+DETECTION_MODELS=(
+"https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx"
+"https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin"
+"https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx"
+)
+
+LORAS=(
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanFun.reworked.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/light.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/light.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanPusa.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/wan.reworked.safetensors"
+)
+
+CLIP_VISION=(
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/klip_vision.safetensors"
+)
+
+DEFFUSION=(
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanModel.safetensors"
+
+)
+### ─────────────────────────────────────────────
+### DO NOT EDIT BELOW UNLESS YOU KNOW WHAT YOU ARE DOING
+### ─────────────────────────────────────────────
+
+function provisioning_start() {
+    echo ""
+    echo "##############################################"
+    echo "# fuck this world                            #"
+    echo "# DURDOM VIDEO GENERATOR V1 2025-2026        #"
+    echo "# by Ruslan & Mapich                         #"
+    echo "##############################################"
+    echo ""
+
+    provisioning_get_apt_packages
+    provisioning_clone_comfyui
+    provisioning_install_base_reqs
+    provisioning_get_nodes
+    provisioning_get_pip_packages
+
+    provisioning_get_files "${COMFYUI_DIR}/models/clip"               "${CLIP_MODELS[@]}"
+    provisioning_get_files "${COMFYUI_DIR}/models/clip_vision"        "${CLIP_VISION[@]}"
+    provisioning_get_files "${COMFYUI_DIR}/models/text_encoders"      "${TEXT_ENCODERS[@]}"
+    provisioning_get_files "${COMFYUI_DIR}/models/vae"                "${VAE_MODELS[@]}"
+    provisioning_get_files "${COMFYUI_DIR}/models/diffusion_models"   "${DIFFUSION_MODELS[@]}"
+
+    provisioning_get_files "${COMFYUI_DIR}/models/detection"   "${DETECTION_MODELS[@]}"
+    provisioning_get_files "${COMFYUI_DIR}/models/loras"   "${LORAS[@]}"
+    provisioning_get_files "${COMFYUI_DIR}/models/diffusion_models"     "${DEFFUSION[@]}"
+
+    echo ""
+    echo "DURDOM настроил → Starting ComfyUI..."
+    echo ""
+}
+
+function provisioning_clone_comfyui() {
+    if [[ ! -d "${COMFYUI_DIR}" ]]; then
+        echo "DURDOM клонирует ComfyUI..."
+        git clone https://github.com/comfyanonymous/ComfyUI.git "${COMFYUI_DIR}"
+    fi
+    cd "${COMFYUI_DIR}"
+}
+
+function provisioning_install_base_reqs() {
+    if [[ -f requirements.txt ]]; then
+        echo "DURDOM установливает base requirements..."
+        pip install --no-cache-dir -r requirements.txt
+    fi
+}
+
+function provisioning_get_apt_packages() {
+    if [[ ${#APT_PACKAGES[@]} -gt 0 ]]; then
+        echo "DURDOM устанавливает apt packages..."
+        sudo apt update && sudo apt install -y "${APT_PACKAGES[@]}"
+    fi
+}
+
+function provisioning_get_pip_packages() {
+    if [[ ${#PIP_PACKAGES[@]} -gt 0 ]]; then
+        echo "DURDOM устанавливает extra pip packages..."
+        pip install --no-cache-dir "${PIP_PACKAGES[@]}"
+    fi
+}
+
+function provisioning_get_nodes() {
+    mkdir -p "${COMFYUI_DIR}/custom_nodes"
+    cd "${COMFYUI_DIR}/custom_nodes"
+
+    for repo in "${NODES[@]}"; do
+        dir="${repo##*/}"
+        path="./${dir}"
+
+        if [[ -d "$path" ]]; then
+            echo "Updating node: $dir"
+            (cd "$path" && git pull --ff-only 2>/dev/null || { git fetch && git reset --hard origin/main; })
+        else
+            echo "Cloning node: $dir"
+            git clone "$repo" "$path" --recursive || echo " [!] Clone failed: $repo"
+        fi
+
+        requirements="${path}/requirements.txt"
+        if [[ -f "$requirements" ]]; then
+            echo "Installing deps for $dir..."
+            pip install --no-cache-dir -r "$requirements" || echo " [!] pip requirements failed for $dir"
+        fi
+    done
+}
+
+function provisioning_get_files() {
+    if [[ $# -lt 2 ]]; then return; fi
+    local dir="$1"
+    shift
+    local files=("$@")
+
+    mkdir -p "$dir"
+    echo "Скачивание ${#files[@]} file(s) → $dir..."
+
+    for url in "${files[@]}"; do
+        echo "→ $url"
+        local auth_header=""
+        if [[ -n "$HF_TOKEN" && "$url" =~ huggingface\.co ]]; then
+            auth_header="--header=Authorization: Bearer $HF_TOKEN"
+        elif [[ -n "$CIVITAI_TOKEN" && "$url" =~ civitai\.com ]]; then
+            auth_header="--header=Authorization: Bearer $CIVITAI_TOKEN"
+        fi
+
+        wget $auth_header -nc --content-disposition --show-progress -e dotbytes=4M -P "$dir" "$url" || echo " [!] Download failed: $url"
+        echo ""
+    done
+}
+
+# Запуск provisioning если не отключен
+if [[ ! -f /.noprovisioning ]]; then
+    provisioning_start
 fi
 
-if [ -f "$CUSTOM_NODES_DIR/$NODE_NAME/requirements.txt" ]; then
-  python -m pip install --no-cache-dir -r "$CUSTOM_NODES_DIR/$NODE_NAME/requirements.txt"
-fi
-
-download_file "https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/resolve/main/Wan22Animate/Wan2_2-Animate-14B_fp8_scaled_e4m3fn_KJ_v2.safetensors" \
-  "$MODELS_DIR/diffusion_models/Wan2_2-Animate-14B_fp8_scaled_e4m3fn_KJ_v2.safetensors"
-
-download_file "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Pusa/Wan21_PusaV1_LoRA_14B_rank512_bf16.safetensors" \
-  "$MODELS_DIR/loras/Wan21_PusaV1_LoRA_14B_rank512_bf16.safetensors"
-
-download_file "https://huggingface.co/alibaba-pai/Wan2.2-Fun-Reward-LoRAs/resolve/main/Wan2.2-Fun-A14B-InP-low-noise-HPS2.1.safetensors" \
-  "$MODELS_DIR/loras/Wan2.2-Fun-A14B-InP-low-noise-HPS2.1.safetensors"
-
-download_file "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors" \
-  "$MODELS_DIR/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors"
-
-download_file "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors" \
-  "$MODELS_DIR/loras/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors"
-
-download_file "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors" \
-  "$MODELS_DIR/vae/wan_2.1_vae.safetensors"
-
-download_file "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors" \
-  "$MODELS_DIR/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
-
-download_file "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors" \
-  "$MODELS_DIR/clip_vision/clip_vision_h.safetensors"
-
-download_file "https://huggingface.co/JunkyByte/easy_ViTPose/resolve/main/onnx/wholebody/vitpose-l-wholebody.onnx" \
-  "$MODELS_DIR/onnx/wholebody/vitpose-l-wholebody.onnx"
-
-echo "Provisioning complete."
+# Запуск ComfyUI
+echo "=== DURDOM запускает ComfyUI ==="
+cd "${COMFYUI_DIR}"
+python main.py --listen 0.0.0.0 --port 8188
