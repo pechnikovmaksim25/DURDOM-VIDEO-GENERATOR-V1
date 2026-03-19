@@ -24,6 +24,9 @@ NODES=(
     "https://github.com/jnxmx/ComfyUI_HuggingFace_Downloader"
     "https://github.com/teskor-hub/NEW-UTILS.git"
     "https://github.com/pechnikovmaksim25/comfyui-teskors-utils-main.git"
+    "https://github.com/rgthree/rgthree-comfy"
+    "https://github.com/Starnodes2024/ComfyUI_StarNodes"
+    "https://github.com/DesertPixelAi/ComfyUI-Desert-Pixel-Nodes"
 )
 
 # ЗАГРУЗКА ФАЙЛОВ НУЖНЫХ
