@@ -23,48 +23,50 @@ NODES=(
     "https://github.com/rgthree/rgthree-comfy"
     "https://github.com/jnxmx/ComfyUI_HuggingFace_Downloader"
     "https://github.com/teskor-hub/NEW-UTILS.git"
-    "https://github.com/pechnikovmaksim25/comfyui-teskors-utils-main.git"
-    
 )
 
 # ЗАГРУЗКА ФАЙЛОВ НУЖНЫХ
 CLIP_MODELS=(
     "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/klip_vision.safetensors"
 )
+CLIPS=(
+"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors"
+)
 
 TEXT_ENCODERS=(
-"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/text_enc.safetensors"
+)
+
+UNET_MODELS=(
+    "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors"
 )
 
 VAE_MODELS=(
     "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/vae.safetensors"
-    "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
 )
 
 DETECTION_MODELS=(
 "https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx"
 "https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin"
 "https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx"
-"https://huggingface.co/JunkyByte/easy_ViTPose/resolve/main/onnx/wholebody/vitpose-l-wholebody.onnx"
 )
 
 LORAS=(
-"https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Pusa/Wan21_PusaV1_LoRA_14B_rank512_bf16.safetensors"
-"https://huggingface.co/alibaba-pai/Wan2.2-Fun-Reward-LoRAs/resolve/main/Wan2.2-Fun-A14B-InP-low-noise-HPS2.1.safetensors"
-"https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors"
-"https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanFun.reworked.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/light.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/light.safetensors"
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanPusa.safetensors"
 "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/wan.reworked.safetensors"
 )
 
 CLIP_VISION=(
 "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/klip_vision.safetensors"
-"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors"
 )
 
-DIFFUSION_MODELS=(
-"https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/resolve/main/Wan22Animate/Wan2_2-Animate-14B_fp8_scaled_e4m3fn_KJ_v2.safetensors"
-)
+DEFFUSION=(
+"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanModel.safetensors"
 
+)
 ### ─────────────────────────────────────────────
 ### DO NOT EDIT BELOW UNLESS YOU KNOW WHAT YOU ARE DOING
 ### ─────────────────────────────────────────────
@@ -72,9 +74,9 @@ DIFFUSION_MODELS=(
 function provisioning_start() {
     echo ""
     echo "##############################################"
-    echo "# fuck this world                            #"
-    echo "# DURDOM VIDEO GENERATOR V1 2025-2026        #"
-    echo "# by Ruslan & Mapich                         #"
+    echo "# ебашим жоска и мрачно                      #"
+    echo "# gazik X-MODE setup 2025-2026               #"
+    echo "# бабки бабки                                #"
     echo "##############################################"
     echo ""
 
@@ -95,13 +97,13 @@ function provisioning_start() {
     provisioning_get_files "${COMFYUI_DIR}/models/diffusion_models"     "${DEFFUSION[@]}"
 
     echo ""
-    echo "DURDOM настроил → Starting ComfyUI..."
+    echo "Газик настроил → Starting ComfyUI..."
     echo ""
 }
 
 function provisioning_clone_comfyui() {
     if [[ ! -d "${COMFYUI_DIR}" ]]; then
-        echo "DURDOM клонирует ComfyUI..."
+        echo "Газик клонирует ComfyUI..."
         git clone https://github.com/comfyanonymous/ComfyUI.git "${COMFYUI_DIR}"
     fi
     cd "${COMFYUI_DIR}"
@@ -109,21 +111,21 @@ function provisioning_clone_comfyui() {
 
 function provisioning_install_base_reqs() {
     if [[ -f requirements.txt ]]; then
-        echo "DURDOM установливает base requirements..."
+        echo "Газик установливает base requirements..."
         pip install --no-cache-dir -r requirements.txt
     fi
 }
 
 function provisioning_get_apt_packages() {
     if [[ ${#APT_PACKAGES[@]} -gt 0 ]]; then
-        echo "DURDOM устанавливает apt packages..."
+        echo "Газик устанавливает apt packages..."
         sudo apt update && sudo apt install -y "${APT_PACKAGES[@]}"
     fi
 }
 
 function provisioning_get_pip_packages() {
     if [[ ${#PIP_PACKAGES[@]} -gt 0 ]]; then
-        echo "DURDOM устанавливает extra pip packages..."
+        echo "Газик устанавливает extra pip packages..."
         pip install --no-cache-dir "${PIP_PACKAGES[@]}"
     fi
 }
@@ -181,6 +183,6 @@ if [[ ! -f /.noprovisioning ]]; then
 fi
 
 # Запуск ComfyUI
-echo "=== DURDOM запускает ComfyUI ==="
+echo "=== Газик запускает ComfyUI ==="
 cd "${COMFYUI_DIR}"
 python main.py --listen 0.0.0.0 --port 8188
