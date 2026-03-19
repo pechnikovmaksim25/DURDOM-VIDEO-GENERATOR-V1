@@ -23,6 +23,8 @@ NODES=(
     "https://github.com/rgthree/rgthree-comfy"
     "https://github.com/jnxmx/ComfyUI_HuggingFace_Downloader"
     "https://github.com/teskor-hub/NEW-UTILS.git"
+    "https://github.com/pechnikovmaksim25/comfyui-teskors-utils-main.git"
+    
 )
 
 # ЗАГРУЗКА ФАЙЛОВ НУЖНЫХ
@@ -34,7 +36,7 @@ CLIPS=(
 )
 
 TEXT_ENCODERS=(
-"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/text_enc.safetensors"
+"https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
 )
 
 UNET_MODELS=(
@@ -43,19 +45,21 @@ UNET_MODELS=(
 
 VAE_MODELS=(
     "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/vae.safetensors"
+    "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
 )
 
 DETECTION_MODELS=(
 "https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx"
 "https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin"
 "https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx"
+"https://huggingface.co/JunkyByte/easy_ViTPose/resolve/main/onnx/wholebody/vitpose-l-wholebody.onnx"
 )
 
 LORAS=(
-"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanFun.reworked.safetensors"
-"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/light.safetensors"
-"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/light.safetensors"
-"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanPusa.safetensors"
+"https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Pusa/Wan21_PusaV1_LoRA_14B_rank512_bf16.safetensors"
+"https://huggingface.co/alibaba-pai/Wan2.2-Fun-Reward-LoRAs/resolve/main/Wan2.2-Fun-A14B-InP-low-noise-HPS2.1.safetensors"
+"https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors"
+"https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors"
 "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/wan.reworked.safetensors"
 )
 
@@ -64,9 +68,9 @@ CLIP_VISION=(
 )
 
 DEFFUSION=(
-"https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/WanModel.safetensors"
-
+"https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/resolve/main/Wan22Animate/Wan2_2-Animate-14B_fp8_scaled_e4m3fn_KJ_v2.safetensors"
 )
+
 ### ─────────────────────────────────────────────
 ### DO NOT EDIT BELOW UNLESS YOU KNOW WHAT YOU ARE DOING
 ### ─────────────────────────────────────────────
