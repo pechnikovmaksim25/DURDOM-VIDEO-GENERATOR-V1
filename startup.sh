@@ -44,6 +44,7 @@ UNET_MODELS=(
 
 VAE_MODELS=(
     "https://huggingface.co/wdsfdsdf/OFMHUB/resolve/main/vae.safetensors"
+    "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
 )
 
 DETECTION_MODELS=(
